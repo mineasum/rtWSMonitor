@@ -2,6 +2,7 @@
 <tr>
 <th>no</th>
 <th>stockId</th>
+<th>cname</th>
 <th>kline</th>
 <th>last ptr</th>
 <th>lost ptr</th>
@@ -15,8 +16,14 @@
 	<td>
 	<a href="tick.php?key=<?php echo $k?>"><?php echo $k?></a>
 	</td>
+	<td>
+		<?php echo $v['cname'] ?>
+	</td>
 <td>
-	<a href="kline.php?key=<?php echo $k?>">1min</a>
+	<a href="kline.php?key=<?php echo $k?>&type=1M">1M</a>
+	<a href="kline.php?key=<?php echo $k?>&type=D">D</a>
+	<a href="kline.php?key=<?php echo $k?>&type=W">W</a>
+	<a href="kline.php?key=<?php echo $k?>&type=M">M</a>
 </td>
 	<td>
 	<?php echo $v['lostInfo'][0]?>

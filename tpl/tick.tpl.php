@@ -1,4 +1,4 @@
-
+<h3><?php echo $data['id'],'-',$data['cname']?></h3>
 <table class="table table-striped">
 <tr>
 	<th>no</th>

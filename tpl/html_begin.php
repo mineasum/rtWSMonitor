@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -13,8 +14,12 @@
   </head>
 	<body>
 <div style="width:1000px;margin:10px auto;">
+<div>
+TDATE:<?php echo $global['tdate']?>
+</div>
 <div style="width:900px;margin:10px;">
 <form action="keys.php" method="get" class="form-search form-inline" >
+<a class="btn" href="overview.php">Overview</a> 
 <a class="btn" href="clearCache.php">Clear cache</a> 
 <a class="btn" href="notify.php">Notify</a> 
 <a class="btn" href="kv_status.php?node=kv.master">kv.master status</a>

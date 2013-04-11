@@ -1,33 +1,50 @@
 <?php
 
 $config=array();
-$config['redis']='192.168.10.155:6379';
-$config['redis_slave']='192.168.10.155:6579';
+$config['redis']['0']['addr']='192.168.10.155:6379';
+$config['redis']['0']['title']='master';
+$config['redis']['1']['addr']='192.168.10.155:6579';
+$config['redis']['1']['title']='slave';
+
+$config['rtws']['host'] = "192.168.10.155";
+$config['rtws']['title'] = "開發機";
+
 //method=GetStkByJSON&paras=10200.tw&ptr=-1&limit=15 last 15 rows
 //method=GetStockInfoJSON&paras=10200.tw
 //method=GetStockInfoQuote&paras=10200.tw
 $config['command']='http://192.168.10.155/QuoteService/GetCommand?';
-$config['db']=array(
+$config['database']=array(
 	'usr'=>'root',
-	'password' => 'iamroot'
+	'password' => 'iamroot',
+	'db'=>'apex',
+	'port'=>3306
 );
 
 try{
 	$redis=new Redis();
-	$redis->connect($config['redis']);
+	$redis->connect($config['redis']['0']['addr']);
 }catch(Exception $e){
 	echo $e->getMessage();
 	exit(0);
 }
+
+
+//Global
+$global=array();
+$global['tdate']=preg_replace( '/\"/' , '' , $redis->get('g.tdate'));
+
 function view( $filename,$data ){
-	include "html_begin.php";
+	global $global;
+	$tpl_folder='tpl/';
+	include $tpl_folder."html_begin.php";
 	if(empty($filename)){
 	  echo $data;
 	}else{
-		include "tpl/".$filename;
+		include $tpl_folder.$filename;
 	}
-	include "html_end.php";
+	include $tpl_folder."html_end.php";
 }
+
 function getTickDataList( $redis , $key , $empty , $lost ){
 	$keys=$redis->keys("info.*$key*.tw");
 	$data=array();
@@ -48,7 +65,8 @@ function getTickDataList( $redis , $key , $empty , $lost ){
 				if(count($lostInfo[2])==0)continue;		
 			}
 			$datalist[$path] = array( 
-				'lostInfo' => $lostInfo
+				'lostInfo' => $lostInfo,
+				'cname' => $redis->hget($k,'cname')
 			);
 		}
 	}
@@ -103,4 +121,8 @@ function bindLost($lost){
 		}
 	}
 	return $ret;
+}
+
+function htmlStatus($status=false){
+	return ( $status ) ? "<img src=\"img/on.png\"/>" : "<img src=\"img/off.png\"/>";	
 }
